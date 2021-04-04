@@ -1,26 +1,32 @@
-const express=require('express');
-const mysql=require('mysql');
-const myconn=require('express myconnection')
+const express = require('express');
+const mysql = require('mysql');
+const myconn = require('express-myconnection')
 
-const app=express();
-app.set('port', process.env.PORT||9000);
+const routes = require('./routes');
+
+const app = express();
+app.set('port', process.env.PORT || 9000);
+
 const dbOptions={
-    host:'localhost',
+    host:'devact2db.cnpfjiqrigo1.us-east-2.rds.amazonaws.com',
     port:3306,
-    user:"root",
-    password:'abc123',
-    database:'library'
+    user:"admin",
+    password:'Origami_8563',
+    database:'notesDB'
 }
 
-//middleware----------------------------
-app.use(myconn(mysql,dbOptions,'single'))
+//midlewares-----------------------------------------------
+app.use(myconn(mysql, dbOptions, "single"));
+app.use(express.json());
 
-//routes-------------------------------
-app.get('/',(req,res)=>{
-    res.send('welcome to my api')
+//routes ---------------------------------------------------
+app.get('/', (req, res) => {
+  res.send("Welcome to my api");
 })
 
-//server running----------------------- 
-app.listen(app.get('port'),()=>{
-    console.log('server running on port', app.get('port'))
-})
+app.use('/api', routes);
+
+//server running ---------------------------------------------
+app.listen(app.get('port'), () => {
+  console.log('server running on port', app.get('port'));
+});
